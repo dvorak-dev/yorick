@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap
 
-Status: 14 October 2026. Next step is Ruby. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 14 October 2026. Next step is Node.js. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -20,13 +20,11 @@ Pin: [Gemfile.lock](../Gemfile.lock).
 
 Pin: [Gemfile.lock](../Gemfile.lock).
 
-## 3. Ruby
+## 3. Ruby — done 14 October 2026
 
-`3.2.8` → `3.4.11`.
+`3.2.8` → `3.4.11` on branch `upgrade-ruby`. Rails stays on 7.1.5.1.
 
-Ruby 3.2 ended on 1 April 2026. The last release was `3.2.11`, which included the zlib fix for CVE-2026-27820. This pin is behind that release.
-
-Skip 3.3 (security-only until about 31 March 2027) and 4.0 (`cgi` is no longer a default gem; `sitemap_generator` has failed on 4.0). Do this while the app is still on Rails 7.1. Rails 7.1 boots on 3.4, and Rails 8.1 recommends it.
+Ruby 3.2 ended on 1 April 2026. Skipped 3.3 and 4.0.
 
 Pins: [Gemfile](../Gemfile), [.ruby-version](../.ruby-version), [Dockerfile](../Dockerfile), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml).
 
