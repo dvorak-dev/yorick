@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap
 
-Status: 14 October 2026. Next step is Node.js. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 14 October 2026. Next step is Rails. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -28,11 +28,9 @@ Ruby 3.2 ended on 1 April 2026. Skipped 3.3 and 4.0.
 
 Pins: [Gemfile](../Gemfile), [.ruby-version](../.ruby-version), [Dockerfile](../Dockerfile), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml).
 
-## 4. Node.js
+## 4. Node.js — done 14 October 2026
 
-18 → 24.
-
-Node 18 ended on 30 April 2025. Node 20 ended on 30 April 2026. Node 22 ends on 30 April 2027. Node 24 is supported until 30 April 2028.
+18 → 24 on branch `upgrade-node`. Node 24 is supported until 30 April 2028. Skipped 20 and 22.
 
 Pins: [mcp-server/Dockerfile](../mcp-server/Dockerfile), [mcp-server/Dockerfile.prod](../mcp-server/Dockerfile.prod), [mcp-server/Dockerfile.dev](../mcp-server/Dockerfile.dev).
 
