@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap
 
-Status: 14 October 2026. Next step is Nokogiri. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 14 October 2026. Next step is Ruby. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -12,11 +12,11 @@ Work in this order. Each step lands on its own branch.
 
 Pin: [Gemfile.lock](../Gemfile.lock).
 
-## 2. Nokogiri
+## 2. Nokogiri — done 14 October 2026
 
-`1.18.8` → `1.19.4` or newer.
+`1.18.8` → `1.19.4` on branch `upgrade-nokogiri`.
 
-CVE-2026-57235 (out-of-bounds read) and CVE-2026-57438 (use-after-free) are fixed in `1.19.4`.
+`1.19.4` includes CVE-2026-57235 and CVE-2026-57438. Stayed off unreleased main, which changes HTML5 parsing of `iframe` and `noframes`.
 
 Pin: [Gemfile.lock](../Gemfile.lock).
 
