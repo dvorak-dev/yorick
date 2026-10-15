@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap
 
-Status: 14 October 2026. Next step is Rails 8.0. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 14 October 2026. Next step is Rails 8.1. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -42,24 +42,26 @@ Pins: [mcp-server/Dockerfile](../mcp-server/Dockerfile), [mcp-server/Dockerfile.
 | --- | --- |
 | 7.1 | Ended 1 October 2025. Last release was 7.1.6. |
 | 7.2 | Ended 9 August 2026. Done below. |
-| 8.0 | Ends 7 November 2026 |
+| 8.0 | Ends 7 November 2026. Done below. |
 | 8.1 | Until 10 October 2027 |
 
 ### 7.2 — done 14 October 2026
 
 `7.1.5.1` → `7.2.4` on branch `chore/upgrade-dependencies-p2`. `7.2.4` is the final 7.2 release.
 
-`config.load_defaults` stays at 7.1. Rack stayed at 3.1.22.
+`config.load_defaults` was left at 7.1 during this hop. Rack stayed at 3.1.22.
 
-### 8.0
+### 8.0 — done 14 October 2026
 
-Still pending.
+`7.2.4` → `8.0.5.1` on branch `chore/upgrade-dependencies-p2`. `8.0.5.1` is the latest 8.0 release.
+
+`config.load_defaults` is `8.0`, which includes the 7.2 defaults. Rack stayed at 3.1.22.
 
 ### 8.1
 
 The 8.1 hop requires ViewComponent 4. `view_component` `3.23.2` depends on Active Support `< 8.1`.
 
-Pin: [Gemfile](../Gemfile) (`~> 7.2.4`).
+Pin: [Gemfile](../Gemfile) (`~> 8.0.5`).
 
 ## 6. Elasticsearch
 
