@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap
 
-Status: 14 October 2026. Next step is the MCP SDK. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 14 October 2026. Next step is the MCP SDK v2. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -81,9 +81,17 @@ Clients on the same branch:
 
 `@modelcontextprotocol/sdk` `1.16.0` → `1.32.1`, then v2.
 
-`1.32.1` is the same package. v1 maintenance runs until about January 2027. v2 replaces it with `@modelcontextprotocol/server` and `@modelcontextprotocol/express`. Express stays on 5; bump it to `^5.2.1` with the v1 update. Zod 3.25 is still accepted.
+### 1.32.1 — done 14 October 2026
+
+`1.16.0` → `1.32.1` on branch `chore/upgrade-dependencies-p3`. Express `^5.1.0` → `^5.2.1` (lock resolves `5.3.0`). Zod stayed at `3.25.76`.
+
+`1.32.1` is the same package. v1 maintenance runs until about January 2027.
 
 Pin: [mcp-server/package.json](../mcp-server/package.json).
+
+### v2
+
+v2 replaces `@modelcontextprotocol/sdk` with `@modelcontextprotocol/server` and `@modelcontextprotocol/express`. Express stays on 5.
 
 ## Deferred
 
