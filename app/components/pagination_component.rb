@@ -4,7 +4,7 @@ class PaginationComponent < ViewComponent::Base
   include Pagy::Frontend
 
   def initialize(pagy:)
-    super
+    super()
     @pagy = pagy
   end
 
