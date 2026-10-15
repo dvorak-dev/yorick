@@ -72,8 +72,8 @@ group :test do
   gem 'selenium-webdriver'
 end
 
-gem 'chewy', '~> 7.2.7'
-gem 'elasticsearch', '~> 7.0'
+gem 'chewy', '~> 8.4'
+gem 'elasticsearch', '>= 8.14', '< 9'
 gem 'pagy', '~> 9.3'
 gem 'sitemap_generator', '~> 6.3'
 gem 'tailwindcss-rails', '~> 4.2'

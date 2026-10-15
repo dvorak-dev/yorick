@@ -21,7 +21,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@elastic/elasticsearch": "^8.13.0",
+    "@elastic/elasticsearch": "^8.19.2",
     "@modelcontextprotocol/sdk": "^1.16.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
