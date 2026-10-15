@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { McpServer } from "@modelcontextprotocol/server";
+import { NodeStreamableHTTPServerTransport } from "@modelcontextprotocol/node";
 import { searchFuneralNotices } from "./tools/search.js";
 import { getFuneralNotice } from "./tools/get.js";
 import { listFuneralNotices } from "./tools/list.js";
@@ -38,24 +38,16 @@ app.post('/mcp', async (req, res) => {
     transport = transports[sessionId];
   } else {
     // New initialization request
-    transport = new StreamableHTTPServerTransport({
+    transport = new NodeStreamableHTTPServerTransport({
       sessionIdGenerator: () => randomUUID(),
       onsessioninitialized: (sessionId) => {
         // Store the transport by session ID
         transports[sessionId] = transport;
       },
-      // DNS rebinding protection is disabled by default for backwards compatibility
-      // For local development, you might want to enable it:
-      // enableDnsRebindingProtection: true,
-      // allowedHosts: ['127.0.0.1'],
+      onsessionclosed: (sessionId) => {
+        delete transports[sessionId];
+      },
     });
-
-    // Clean up transport when closed
-    transport.onclose = () => {
-      if (transport.sessionId) {
-        delete transports[transport.sessionId];
-      }
-    };
 
     const server = new McpServer({
       name: "funeral-notices-mcp-server",
@@ -68,12 +60,12 @@ app.post('/mcp', async (req, res) => {
       {
         title: "Search Funeral Notices",
         description: "Search funeral notices using Elasticsearch full-text search",
-        inputSchema: {
+        inputSchema: z.object({
           query: z.string().describe("Search query for full name or content"),
           date_from: z.string().optional().describe("Start date filter (YYYY-MM-DD format)"),
           date_to: z.string().optional().describe("End date filter (YYYY-MM-DD format)"),
           limit: z.number().optional().describe("Maximum number of results (default: 50, max: 500)")
-        }
+        })
       },
       async (args) => {
         return await searchFuneralNotices(args);
@@ -85,9 +77,9 @@ app.post('/mcp', async (req, res) => {
       {
         title: "Get Funeral Notice",
         description: "Retrieve a specific funeral notice by hash_id",
-        inputSchema: {
+        inputSchema: z.object({
           hash_id: z.string().describe("The funeral notice hash_id")
-        }
+        })
       },
       async (args) => {
         return await getFuneralNotice(args);
@@ -99,14 +91,14 @@ app.post('/mcp', async (req, res) => {
       {
         title: "List Funeral Notices",
         description: "List funeral notices with pagination and filtering",
-        inputSchema: {
+        inputSchema: z.object({
           page: z.number().optional().describe("Page number (default: 1)"),
           limit: z.number().optional().describe("Items per page (default: 50)"),
           date_from: z.string().optional().describe("Start date (YYYY-MM-DD)"),
           date_to: z.string().optional().describe("End date (YYYY-MM-DD)"),
           order_by: z.enum(["published_on", "full_name", "created_at"]).optional().describe("Sort field"),
           order_direction: z.enum(["asc", "desc"]).optional().describe("Sort direction")
-        }
+        })
       },
       async (args) => {
         return await listFuneralNotices(args);

@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap
 
-Status: 14 October 2026. Next step is the MCP SDK v2. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 14 October 2026. The ordered upgrades are done. Deferred items remain below. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -89,9 +89,13 @@ Clients on the same branch:
 
 Pin: [mcp-server/package.json](../mcp-server/package.json).
 
-### v2
+### v2 — done 14 October 2026
 
-v2 replaces `@modelcontextprotocol/sdk` with `@modelcontextprotocol/server` and `@modelcontextprotocol/express`. Express stays on 5.
+`@modelcontextprotocol/sdk` `1.32.1` → `@modelcontextprotocol/server` `2.3.1` and `@modelcontextprotocol/node` `2.1.1` on branch `chore/upgrade-dependencies-p3`. Zod `3.25.76` → `4.6.7` (`^4.2.0`). Express stayed on 5.
+
+The Node package supplies the Streamable HTTP transport. `@modelcontextprotocol/express` is the host-validation helper, and this server keeps its own Express app listening on `0.0.0.0`.
+
+Pin: [mcp-server/package.json](../mcp-server/package.json).
 
 ## Deferred
 
