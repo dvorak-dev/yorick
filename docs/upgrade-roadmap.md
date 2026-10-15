@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap
 
-Status: 14 October 2026. Next step is Elasticsearch. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 14 October 2026. The ordered upgrades are done. Deferred items remain below. This file is the source of truth for the upgrade plan. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -65,25 +65,35 @@ Pins: [mcp-server/Dockerfile](../mcp-server/Dockerfile), [mcp-server/Dockerfile.
 
 Pin: [Gemfile](../Gemfile) (`~> 8.1.4`, `view_component` `~> 4.15`).
 
-## 6. Elasticsearch
+## 6. Elasticsearch — done 14 October 2026
 
-Server `8.13.4` → `8.19.23`. Stay on 8.x. The 8.19 line is supported until 15 July 2027. Chewy 8 does not support Elasticsearch 9.
+Server `8.13.4` → `8.19.23` on branch `chore/upgrade-dependencies-p3`. Stay on 8.x. The 8.19 line is supported until 15 July 2027. Chewy 8 does not support Elasticsearch 9.
 
 Pins: [docker-compose.yml](../docker-compose.yml), [docker-compose.prod.yml](../docker-compose.prod.yml), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml).
 
-After Rails is at least 7.2:
+Clients on the same branch:
 
-- Chewy `7.2.7` → 8
-- `elasticsearch` gem `7.13.3` → `>= 8.14, < 9` (Faraday 1.x leaves with this client)
-- `@elastic/elasticsearch` `8.13.0` → 8.19 in [mcp-server/package.json](../mcp-server/package.json)
-
-The server move can happen before the client move. The 7.x Ruby client is already an unsupported pairing with the 8.13 server.
+- Chewy `7.2.7` → `8.4.1`
+- `elasticsearch` gem `7.13.3` → `8.19.3` (`>= 8.14, < 9`). Faraday 1.x left with the 7.x client.
+- `@elastic/elasticsearch` `8.13.0` → `8.19.2` in [mcp-server/package.json](../mcp-server/package.json)
 
 ## 7. MCP SDK
 
 `@modelcontextprotocol/sdk` `1.16.0` → `1.32.1`, then v2.
 
-`1.32.1` is the same package. v1 maintenance runs until about January 2027. v2 replaces it with `@modelcontextprotocol/server` and `@modelcontextprotocol/express`. Express stays on 5; bump it to `^5.2.1` with the v1 update. Zod 3.25 is still accepted.
+### 1.32.1 — done 14 October 2026
+
+`1.16.0` → `1.32.1` on branch `chore/upgrade-dependencies-p3`. Express `^5.1.0` → `^5.2.1` (lock resolves `5.3.0`). Zod stayed at `3.25.76`.
+
+`1.32.1` is the same package. v1 maintenance runs until about January 2027.
+
+Pin: [mcp-server/package.json](../mcp-server/package.json).
+
+### v2 — done 14 October 2026
+
+`@modelcontextprotocol/sdk` `1.32.1` → `@modelcontextprotocol/server` `2.3.1` and `@modelcontextprotocol/node` `2.1.1` on branch `chore/upgrade-dependencies-p3`. Zod `3.25.76` → `4.6.7` (`^4.2.0`). Express stayed on 5.
+
+The Node package supplies the Streamable HTTP transport. `@modelcontextprotocol/express` is the host-validation helper, and this server keeps its own Express app listening on `0.0.0.0`.
 
 Pin: [mcp-server/package.json](../mcp-server/package.json).
 
