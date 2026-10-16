@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap v2
 
-Status: 16 October 2026. Next step is PostgreSQL. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 16 October 2026. Next step is Pagy. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -38,13 +38,13 @@ Pin: [Gemfile](../Gemfile) (`~> 7.1.1`).
 
 Pins: [Gemfile](../Gemfile), [.ruby-version](../.ruby-version), [Dockerfile](../Dockerfile), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml).
 
-## 4. PostgreSQL
+## 4. PostgreSQL — done 16 October 2026
 
-15 → 16.
+15 → 16. The image tags are `postgres:16` and `postgres:16-alpine` (16.15). The `pg` gem is `1.7.0`. Rack stayed at `3.1.22`.
 
-Support ends 11 November 2027 for 15 and 9 November 2028 for 16. One major at a time. Production data is in `postgres_data`, so this is a dump/restore or `pg_upgrade`, not a tag float. Bump the `pg` gem (`1.5.9`) with the server.
+Support ends 11 November 2027 for 15 and 9 November 2028 for 16. The data directories were not migrated. The production cutover is in [postgres-16-migration.md](postgres-16-migration.md). A 16 container will not start on a 15 volume. Do not delete `db_data` or `postgres_data`.
 
-Pins: [docker-compose.yml](../docker-compose.yml) (`postgres:15`), [docker-compose.prod.yml](../docker-compose.prod.yml) (`postgres:15-alpine`), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml).
+Pins: [docker-compose.yml](../docker-compose.yml) (`postgres:16`), [docker-compose.prod.yml](../docker-compose.prod.yml) (`postgres:16-alpine`), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml), [Gemfile](../Gemfile) (`~> 1.7.0`).
 
 ## 5. Pagy
 
