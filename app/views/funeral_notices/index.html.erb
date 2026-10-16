@@ -6,8 +6,8 @@
 
 <%# Pagination meta tags %>
 <% if @pagy && @pagy.pages > 1 %>
-  <% if @pagy.prev %>
-    <% content_for :prev_url, url_for(request.query_parameters.merge(page: @pagy.prev)) %>
+  <% if @pagy.previous %>
+    <% content_for :prev_url, url_for(request.query_parameters.merge(page: @pagy.previous)) %>
   <% end %>
   <% if @pagy.next %>
     <% content_for :next_url, url_for(request.query_parameters.merge(page: @pagy.next)) %>

@@ -74,7 +74,7 @@ end
 
 gem 'chewy', '~> 8.4'
 gem 'elasticsearch', '>= 8.14', '< 9'
-gem 'pagy', '~> 9.3'
+gem 'pagy', '~> 43.7.1'
 gem 'sitemap_generator', '~> 7.1.1'
 gem 'tailwindcss-rails', '~> 4.2'
 gem 'view_component', '~> 4.15'

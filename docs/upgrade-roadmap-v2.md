@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap v2
 
-Status: 16 October 2026. Next step is Pagy. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 16 October 2026. Next step is the frontend gems. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -46,13 +46,13 @@ Support ends 11 November 2027 for 15 and 9 November 2028 for 16. The data direct
 
 Pins: [docker-compose.yml](../docker-compose.yml) (`postgres:16`), [docker-compose.prod.yml](../docker-compose.prod.yml) (`postgres:16-alpine`), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml), [Gemfile](../Gemfile) (`~> 1.7.0`).
 
-## 5. Pagy
+## 5. Pagy — done 16 October 2026
 
 `9.3.4` → `43.7.1`.
 
-[app/components/pagination_component.rb](../app/components/pagination_component.rb) includes `Pagy::Frontend` and delegates `series`. [config/initializers/pagy.rb](../config/initializers/pagy.rb) loads the 9.x extras. This is an API change.
+Controllers call `pagy(:offset, collection)`. `Pagy::Backend`, `Pagy::Frontend`, and the 9.x extras are gone. The page size stays 50 through `Pagy::OPTIONS[:limit]`. Views use `@pagy.previous`. Rack stayed at `3.1.22`.
 
-Pin: [Gemfile](../Gemfile) (`~> 9.3`).
+Pin: [Gemfile](../Gemfile) (`~> 43.7.1`).
 
 ## 6. Frontend
 

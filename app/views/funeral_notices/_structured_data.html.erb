@@ -194,8 +194,8 @@
           <% end %>
         ]
       }
-      <% if @pagy.prev %>
-        ,"previousPage": "<%= url_for(request.query_parameters.merge(page: @pagy.prev)) %>"
+      <% if @pagy.previous %>
+        ,"previousPage": "<%= url_for(request.query_parameters.merge(page: @pagy.previous)) %>"
       <% end %>
       <% if @pagy.next %>
         ,"nextPage": "<%= url_for(request.query_parameters.merge(page: @pagy.next)) %>"
