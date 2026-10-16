@@ -5,9 +5,10 @@ namespace :sitemap do
     puts '🗺️  Generating sitemap...'
 
     begin
-      # Generate the sitemap
+      # Generate the sitemap. config/sitemap.rb calls create with a block,
+      # which is what version 7 finalizes. create with no block does not.
       SitemapGenerator::Sitemap.verbose = true
-      SitemapGenerator::Sitemap.create
+      SitemapGenerator::Interpreter.run
 
       puts '✅ Sitemap generated successfully!'
 

@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap v2
 
-Status: 16 October 2026. Next step is sitemap_generator. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 16 October 2026. Next step is Ruby. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -22,13 +22,13 @@ Pin: [Gemfile](../Gemfile) (`~> 7.2.1`).
 
 Pin: [Gemfile](../Gemfile) (`~> 8.0.2`).
 
-## 2. sitemap_generator
+## 2. sitemap_generator — done 16 October 2026
 
 `6.3.0` → `7.1.1`.
 
-[lib/tasks/sitemap.rake](../lib/tasks/sitemap.rake) calls `SitemapGenerator::Sitemap.create` with no block, and version 7 does not finalize that call. [config/sitemap.rb](../config/sitemap.rb) already passes a block. Version 6.3 also loads `cgi/session`, which blocks Ruby 4.
+Version 7 finalizes `Sitemap.create` only when a block is given, and the default search-engine list is empty. [lib/tasks/sitemap.rake](../lib/tasks/sitemap.rake) now runs [config/sitemap.rb](../config/sitemap.rb) through `SitemapGenerator::Interpreter.run`. That file already calls `create` with a block. The app does not ping search engines. Version 6.3 loaded `cgi/session`, which blocked Ruby 4.
 
-Pin: [Gemfile](../Gemfile) (`~> 6.3`).
+Pin: [Gemfile](../Gemfile) (`~> 7.1.1`).
 
 ## 3. Ruby
 
