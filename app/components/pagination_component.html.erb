@@ -1,8 +1,8 @@
 <% if @pagy.pages > 1 %>
   <nav class="flex justify-center space-x-2 text-sm" aria-label="Paginación">
     <%# Previous %>
-    <% if @pagy.prev %>
-      <%= link_to "←", url_for(params_to_keep.merge(page: @pagy.prev)), 
+    <% if @pagy.previous %>
+      <%= link_to "←", url_for(params_to_keep.merge(page: @pagy.previous)), 
           class: "px-4 py-2 rounded bg-[#312e81] text-white hover:bg-[#0f172a]", 
           title: "Anterior",
           rel: "prev" %>
