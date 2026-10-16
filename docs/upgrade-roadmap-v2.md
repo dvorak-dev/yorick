@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap v2
 
-Status: 16 October 2026. Next step is Puma 8.0.2. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 16 October 2026. Next step is sitemap_generator. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -16,9 +16,11 @@ Puma supports only the latest 7.x and 8.x. `6.6.0` is unsupported. CVE-2026-4773
 
 Pin: [Gemfile](../Gemfile) (`~> 7.2.1`).
 
-### 8.0.2
+### 8.0.2 — done 16 October 2026
 
-`7.2.1` → `8.0.2`.
+`7.2.1` → `8.0.2`. Rack stayed at `3.1.22`. [config/puma.rb](../config/puma.rb) pins the listen host to `0.0.0.0`, because Puma 8 otherwise binds IPv6 (`::`) when that interface exists.
+
+Pin: [Gemfile](../Gemfile) (`~> 8.0.2`).
 
 ## 2. sitemap_generator
 
