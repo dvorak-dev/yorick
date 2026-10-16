@@ -45,7 +45,10 @@
       </div>
     <% else %>
       <div class="text-center py-12">
-        <p class="text-gray-400 text-lg">No se encontraron resultados.</p>
+        <p class="text-gray-400 text-lg">No se encontraron avisos.</p>
+        <% if params[:full_name].present? || params[:content].present? || params[:year_from].present? || params[:year_to].present? %>
+          <p class="text-gray-400 mt-2">Pruebe el comienzo del apellido, o una palabra del texto del aviso.</p>
+        <% end %>
       </div>
     <% end %>
   </div>

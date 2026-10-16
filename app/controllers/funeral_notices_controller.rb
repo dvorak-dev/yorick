@@ -1,9 +1,9 @@
 class FuneralNoticesController < ApplicationController
   def index
-    @pagy, @funeral_notices = if params[:full_name].present? || params[:content].present?
+    @pagy, @funeral_notices = if search_params.to_h.values.any?(&:present?)
                                 search_funeral_notices
                               else
-                                pagy(:offset, FuneralNotice.order(published_on: :desc, full_name: :asc))
+                                default_notice_page
                               end
 
     # Set cache headers for index page
@@ -43,75 +43,81 @@ class FuneralNoticesController < ApplicationController
 
   private
 
-  def build_full_name_query(query)
-    {
-      multi_match: {
-        query: query,
-        fields: ['full_name^3', 'full_name._2gram^2', 'full_name._3gram'],
-        type: 'best_fields',
-        fuzziness: 'AUTO',
-        operator: 'and',
-        minimum_should_match: '75%',
-        boost: 2.0,
-        tie_breaker: 0.3,
-        max_expansions: 10
-      }
-    }
+  def default_notice_page
+    pagy(:offset, FuneralNotice.order(published_on: :desc, full_name: :asc))
   end
 
-  def build_content_query(query)
-    {
-      multi_match: {
-        query: query,
-        fields: ['content^2', 'content._2gram', 'content._3gram'],
-        type: 'best_fields',
-        fuzziness: 'AUTO',
-        operator: 'and',
-        minimum_should_match: '50%',
-        boost: 1.0,
-        tie_breaker: 0.3,
-        max_expansions: 10
-      }
-    }
+  def build_search_query(search)
+    text = text_query(search)
+    published = published_on_filter(search)
+    return {} if text.blank? && published.blank?
+
+    bool = {}
+    bool[:must] = text if text.present?
+    bool[:filter] = published if published.present?
+    { bool: bool }
   end
 
-  def build_search_query(params)
-    return {} if params.blank?
-
+  def text_query(search)
     queries = []
-    queries << build_full_name_query(params[:full_name]) if params[:full_name].present?
-    queries << build_content_query(params[:content]) if params[:content].present?
+    queries << FuneralNoticeSearch.field_query('full_name', search[:full_name]) if search[:full_name].present?
+    queries << FuneralNoticeSearch.field_query('content', search[:content]) if search[:content].present?
+    queries.compact!
+    queries.presence
+  end
 
-    return {} if queries.empty?
+  def published_on_filter(search)
+    from_year, to_year = publication_years(search)
+    return if from_year.nil? && to_year.nil?
 
-    {
-      bool: {
-        should: queries,
-        minimum_should_match: 1
-      }
-    }
+    range = {}
+    range[:gte] = Date.new(from_year, 1, 1).iso8601 if from_year
+    range[:lte] = Date.new(to_year, 12, 31).iso8601 if to_year
+    [{ range: { published_on: range } }]
+  end
+
+  def publication_years(search)
+    years = [four_digit_year(search[:year_from]), four_digit_year(search[:year_to])]
+    years.reverse! if years.all? && years.first > years.last
+    years
+  end
+
+  def four_digit_year(value)
+    year = value.to_s
+    return unless year.match?(/\A\d{4}\z/)
+
+    year.to_i
   end
 
   def search_funeral_notices
     search_query = build_search_query(search_params)
-    return pagy(:offset, FuneralNotice.order(published_on: :desc, full_name: :asc)) if search_query.empty?
+    return default_notice_page if search_query.empty?
 
-    # Get all matching results from Elasticsearch (up to 500)
-    results = FuneralNoticesIndex.query(search_query).limit(500).load
-    ids = results.map(&:id)
-    notices = FuneralNotice.where(id: ids).index_by(&:id)
-    ordered_notices = ids.filter_map { |id| notices[id.to_i] }
-
-    # Sort by published_on desc, full_name asc
-    sorted_notices = sort_notices_by_date_and_name(ordered_notices)
-    pagy(:offset, sorted_notices)
+    page = current_search_page
+    request = search_request(search_query, page)
+    pagy = Pagy::Offset.new(count: request.count, page: page, limit: Pagy::OPTIONS[:limit])
+    [pagy, notices_in_hit_order(request)]
   end
 
-  def sort_notices_by_date_and_name(notices)
-    notices.sort_by { |notice| [-notice.published_on.to_time.to_i, notice.full_name.downcase] }
+  def current_search_page
+    [params[:page].to_i, 1].max
+  end
+
+  def search_request(search_query, page)
+    limit = Pagy::OPTIONS[:limit]
+    FuneralNoticesIndex.query(search_query)
+      .order({ _score: { order: :desc } }, { published_on: { order: :desc } })
+      .limit(limit)
+      .offset((page - 1) * limit)
+  end
+
+  def notices_in_hit_order(request)
+    ids = request.to_a.map { |hit| hit.id.to_i }
+    notices = FuneralNotice.where(id: ids).index_by(&:id)
+    ids.filter_map { |id| notices[id] }
   end
 
   def search_params
-    params.except(:commit).permit(:full_name, :content)
+    params.except(:commit).permit(:full_name, :content, :year_from, :year_to)
   end
 end

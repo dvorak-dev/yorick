@@ -12,13 +12,18 @@ A Model Context Protocol (MCP) server that provides access to funeral notices da
 ## Tools Available
 
 ### `search_funeral_notices`
-Search funeral notices by name, date, or content using Elasticsearch.
+Search funeral notices by name or notice text. A partial surname such as `Garc` matches García and Garcé, not Gari or Gara. One extra surname still returns the notice. Accents are ignored, and particles such as `de` and `vda` are ignored. Results include `hash_id` so `get_funeral_notice` can open one.
+
+At least one of `query`, `full_name`, or `content` is required.
 
 **Parameters:**
-- `query` (required): Search term
+- `query` (optional): Search the name and the notice text. Ignored for the name when `full_name` is also sent.
+- `full_name` (optional): Name search
+- `content` (optional): Words from the notice text. `mosqueteras` does not match `mosqueteros`.
 - `date_from` (optional): Start date (YYYY-MM-DD)
 - `date_to` (optional): End date (YYYY-MM-DD)
-- `limit` (optional): Maximum results (default: 50, max: 500)
+- `page` (optional): Page number (default: 1)
+- `limit` (optional): Results per page (default: 50, max: 50)
 
 ### `get_funeral_notice`
 Retrieve a specific funeral notice by hash_id.

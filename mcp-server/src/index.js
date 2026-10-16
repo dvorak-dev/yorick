@@ -59,12 +59,15 @@ app.post('/mcp', async (req, res) => {
       "search_funeral_notices",
       {
         title: "Search Funeral Notices",
-        description: "Search funeral notices using Elasticsearch full-text search",
+        description: "Search funeral notices by name or notice text. A partial surname such as Garc matches García and Garcé, not Gari or Gara. One extra surname still returns the notice. Accents are ignored, and particles such as de and vda are ignored.",
         inputSchema: z.object({
-          query: z.string().describe("Search query for full name or content"),
+          query: z.string().optional().describe("Search the name and the notice text. Ignored for the name when full_name is also sent."),
+          full_name: z.string().optional().describe("Name search. A prefix such as Garc matches García and Garcé."),
+          content: z.string().optional().describe("Words from the notice text. mosqueteras does not match mosqueteros."),
           date_from: z.string().optional().describe("Start date filter (YYYY-MM-DD format)"),
           date_to: z.string().optional().describe("End date filter (YYYY-MM-DD format)"),
-          limit: z.number().optional().describe("Maximum number of results (default: 50, max: 500)")
+          page: z.number().optional().describe("Page number (default: 1)"),
+          limit: z.number().optional().describe("Results per page (default: 50, max: 50)")
         })
       },
       async (args) => {
