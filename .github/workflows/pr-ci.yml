@@ -44,10 +44,10 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Set up Ruby 3.4.11
+      - name: Set up Ruby 4.0.7
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4.11'
+          ruby-version: '4.0.7'
           bundler-cache: true
       - name: Prepare Database
         env:

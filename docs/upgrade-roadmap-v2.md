@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap v2
 
-Status: 16 October 2026. Next step is Ruby. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 16 October 2026. Next step is PostgreSQL. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -30,11 +30,11 @@ Version 7 finalizes `Sitemap.create` only when a block is given, and the default
 
 Pin: [Gemfile](../Gemfile) (`~> 7.1.1`).
 
-## 3. Ruby
+## 3. Ruby — done 16 October 2026
 
-`3.4.11` → `4.0.7`, only after sitemap_generator 7.
+`3.4.11` → `4.0.7`.
 
-`4.0.7` is the current stable release. Skip `4.1.0-preview1`.
+`4.0.7` is the current stable release. `4.1.0-preview1` was skipped. `CGI.escape` still comes from `cgi/escape`, which Ruby 4 keeps, so the `cgi` gem was not added. Bundler stays at `2.6.5`. `unicode-emoji` moved from `4.0.4` to `4.3.0` because `4.0.4` requires Ruby `< 4.0`. Rack stayed at `3.1.22`.
 
 Pins: [Gemfile](../Gemfile), [.ruby-version](../.ruby-version), [Dockerfile](../Dockerfile), [.github/workflows/pr-ci.yml](../.github/workflows/pr-ci.yml).
 
