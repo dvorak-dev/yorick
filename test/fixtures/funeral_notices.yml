@@ -1,4 +1,7 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Curated from https://funebres.enlaplata.com.ar.
+# Headlines in this sample contain no hyphens, so none were invented.
+# JUAN CARLOS MUÑOZ is a headline that itself contains ñ.
+# MAXIMO GARCIA is stored unaccented; the body contains García.
 
 one:
   full_name: MyString
@@ -13,3 +16,227 @@ two:
   published_on: 2025-04-10
   source_link: MyString
   hash_id: def456
+
+norma_garcia_4e7977:
+  full_name: "NORMA GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 20/12/0204.- A nuestra compañera del colegio Eucarístico y grupo Las mosqueteras: Teresa Gonzales, Ana Maria Antón, Nelida Bastitela, Silvia Hernandez, Silvia Palvis y Gloria Cardella, la recordarán con mucho afecto.
+  published_on: 2024-12-22
+  source_link: "https://funebres.eldia.com/edis/20241222/funebres2.htm"
+  hash_id: 4e7977
+
+isaac_garcia_51e9a5:
+  full_name: "ISAAC GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 01/11/2024 en Rawson.- Liliana Alfano y Aldo Casassa acompañan a la querida Liria en este triste momento.
+  published_on: 2024-11-03
+  source_link: "https://funebres.eldia.com/edis/20241103/funebres2.htm"
+  hash_id: 51e9a5
+
+maximiliano_garcia_6dafa2:
+  full_name: "MAXIMILIANO GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 29/10/2013.- En un nuevo aniversario de tu fallecimiento, te recordamos con el cariño de siempre. Tus compañeros de Grupo Caruso.
+  published_on: 2024-10-30
+  source_link: "https://funebres.eldia.com/edis/20241030/funebres2.htm"
+  hash_id: 6dafa2
+
+maximiliano_garcia_f8c48f:
+  full_name: "MAXIMILIANO GARCIA"
+  content: |
+    (Q.E.P.D.) 29/10/2013 — 29/10/2023.- En el aniversario de tu partida, te recordamos siempre. Tus compañeros de Grupo Caruso.
+  published_on: 2023-10-29
+  source_link: "https://funebres.eldia.com/edis/20231029/funebres2.htm"
+  hash_id: f8c48f
+
+maximiliano_garcia_9fba70:
+  full_name: "MAXIMILIANO GARCIA"
+  content: |
+    (Q.E.P.D.).- A un año de tu partida, te extrañamos y recordamos siempre. Tus compañeros de Farmacia Caruso.
+  published_on: 2014-10-29
+  source_link: "https://funebres.eldia.com/edis/20141029/funebres2.htm"
+  hash_id: 9fba70
+
+maximiliano_garcia_9a1774:
+  full_name: "MAXIMILIANO GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 29/10/2013.- Su madre: Blanca; esposa: Carolina Rodríguez; hija: Isabella García; su shermanos: Mónica, Matías, Martín y Mariano García; hermanos pols.: Florencia, Mauricio, Verónica y Lesli; sobrinos: Aimé, Tiziana y Franco Riego, Celina García, Uma y Nicolás García; sus tíos: Jorge Astrada, María Cristina Fichera; su cuñada: Florencia Rodrígeuz; suegra: Silvia M. Fichera; primos: Martín, Dana y d/d participan con profundo dolor su fallecimiento, "gracias por todo lo que nos diste, te amamos". Sus restos serán trasladados al cementerio local hoy 11:15 hs. Sepelios Dei, 12 Nº 1792. Tel/fax: 451-7852.
+  published_on: 2013-10-31
+  source_link: "https://funebres.eldia.com/edis/20131031/funebres2.htm"
+  hash_id: 9a1774
+
+nelida_teresa_garcia_vda_de_garcia_tota_e584c9:
+  full_name: "NELIDA TERESA GARCIA VDA. DE GARCIA (Tota)"
+  content: |
+    (Q.E.P.D.) Falleció el 24/02/2020.- Sus hijos: Pelusa, Héctor, Mirta y Patricia; sus hijos políticos: Amparo, Claudia y Kelly; sus nietos: Flavia, Maxi, Pablo, Florencia, Matías, Eugenia, Lucas y Vicky; sus bisnietos: Dieguito, Ariel, Ciro, María Paz y Juanita, sobrinos y demás deudos la despedimos con mucho amor e invitamos acompañar sus restos al Cementerio Parque Iraola hoy 9:15 hs. Velatorio Sala "A". Calle 11 esq. 163. Berisso. Tel/Fax: 461-2565 / 464-6153. Empresa de Sepelios Mariano Flammini. email: mfsepelios@hotmail.com
+  published_on: 2020-02-25
+  source_link: "https://funebres.eldia.com/edis/20200225/funebres2.htm"
+  hash_id: e584c9
+
+guillermo_garcia_ceppi_b88efa:
+  full_name: "GUILLERMO GARCIA CEPPI"
+  content: |
+    (Q.E.P.D.) Falleció el 19/06/2018.- Su ahijada Patricia García y sus hijos participan con profunda tristeza su fallecimiento. Eternamente gracias por haber estado siempre cuando más lo necesite. Cumpliste con creces tu rol de padrino.
+  published_on: 2018-06-20
+  source_link: "https://funebres.eldia.com/edis/20180620/funebres2.htm"
+  hash_id: b88efa
+
+guillermo_pedro_garcia_ceppi_willy_6b4079:
+  full_name: "GUILLERMO PEDRO GARCIA CEPPI (Willy)"
+  content: |
+    (Q.E.P.D.) Falleció el 19/06/2018.- Roberto, Christian y Víctor A. Santiago acompañan a Federico, Alicia y familia en este triste momento. Betti Sepelios City Bell Cno. Centenario y Rivadavia City Bell Tel: (0221) 480-3787.
+  published_on: 2018-06-21
+  source_link: "https://funebres.eldia.com/edis/20180621/funebres2.htm"
+  hash_id: 6b4079
+
+francisca_garcia_rodriguez_5a9094:
+  full_name: "FRANCISCA GARCIA RODRIGUEZ"
+  content: |
+    (Q.E.P.D.) Falleció el 15/05/2018.- Sus hijos: Silvia, Sergio, Mari, Roberto y Angélica. Hijos pcos.: Oscar, Adriana y Juan. Nietos: Daniel, Matías, Julieta, Yasmin y Sebastián. Nieta pca.: Carolina. Bisnietos: Milo y Vito; y demás deudos participan su fallecimiento y que sus restos serán cremados en el Cementerio Parque Iraola. Partiendo el cortejo a las 08:45 hs. desde sala velatoria en calle 16 e/Av. Montevideo y 169 nº 4660, Berisso. Escritorio: Av. Montevideo nº 1419 e/ 16 y 17 Berisso. Tel: 461-2207. Casa de Sepelios Italo Di Lázzaro.
+  published_on: 2018-05-16
+  source_link: "https://funebres.eldia.com/edis/20180516/funebres2.htm"
+  hash_id: 5a9094
+
+adriana_garce_19ad93:
+  full_name: "ADRIANA GARCE"
+  content: |
+    (Q.E.P.D.) Falleció el 03/11/2014.- La Dirección de Bibliotecas de la Provincia lamenta la desaparición física de nuestra empleada y acompaña a sus familiares en su dolor. Se recordará siempre.
+  published_on: 2014-11-06
+  source_link: "https://funebres.eldia.com/edis/20141106/funebres2.htm"
+  hash_id: 19ad93
+
+laura_gari_fe651d:
+  full_name: "LAURA GARI"
+  content: |
+    (Q.E.P.D.) Falleció el 10/11/2012.- A un mes de tu dolorosa partida, no podemos dejar de recordar todas esas mañanas que iluminabas la oficina con tu divertida presencia, sigues estando entre nosotros. Tus amigos y compañeros de fiscalizadores de la MLP.
+  published_on: 2012-12-10
+  source_link: "https://funebres.eldia.com/edis/20121210/funebres2.htm"
+  hash_id: fe651d
+
+margarita_nigra_gara_2e4eab:
+  full_name: "MARGARITA NIGRA (Gara)"
+  content: |
+    (Q.E.P.D.) Falleció el 01/01/2014.- Ana María, Irma, Quequeca, Delia, Stella, Matilde, Angélica, Beba, Negrita, Graciela M., Graciela C., Susana, acompañan a su amiga Haydée en este doloroso momento y ruegan una oración en su memoria.
+  published_on: 2014-01-14
+  source_link: "https://funebres.eldia.com/edis/20140114/funebres2.htm"
+  hash_id: 2e4eab
+
+nestor_orazi_42a4d3:
+  full_name: "NESTOR ORAZI"
+  content: |
+    (Q.E.P.D.) Falleció el 21/03/2022.- Carlos Alberto Meneses y Familia. Querido amigo, cuanta tristeza saber que solamente quedan los gratos recuerdos de tantas charlas con cenas de los cuatro mosqueteros. Elevo oraciones para tu descanso en la paz del Señor.
+  published_on: 2022-03-23
+  source_link: "https://funebres.eldia.com/edis/20220323/funebres2.htm"
+  hash_id: 42a4d3
+
+maria_cristina_del_valle_899bd3:
+  full_name: "MARIA CRISTINA DEL VALLE"
+  content: |
+    (Q.E.P.D.) Falleció el 02/04/2024.- Sus hijas: Veronica, Carolina y Victoria, sus hijos políticos: Pablo, Arturo y Alejandro, sus nietos: Nayara, Martino, Lola, Benicio y Brunna, su hna: Ana y tus amigas mosqueteras te despiden con amor y elevan una oración por tu eterno descanso. Sus restos serán cremados hoy en Parque Del Campanario. Salida de Cortejo hoy 09:45. Betti La Plata 46 Nº 871 Tel.: 421-7477.
+  published_on: 2024-04-05
+  source_link: "https://funebres.eldia.com/edis/20240405/funebres2.htm"
+  hash_id: 899bd3
+
+adriana_mercedes_romanazzi_fd2d2b:
+  full_name: "ADRIANA MERCEDES ROMANAZZI"
+  content: |
+    (Q.E.P.D.) Falleció el 11/11/2022.- Tus amigas "Las Mosqueteras" Marita Suñé, Susana Lacanau y Laura Billordo, hoy, Adri querida, te despedimos con la certeza de que estarás siempre en nuestros corazones.
+  published_on: 2022-11-12
+  source_link: "https://funebres.eldia.com/edis/20221112/funebres2.htm"
+  hash_id: fd2d2b
+
+sra_mary_piacente_de4e14:
+  full_name: "Sra. MARY PIACENTE"
+  content: |
+    (Q.E.P.D.) 04/04/2019.- Nuestra querida Mary, qué difícil fue estar todo este año sin tu risa, sin tu alegría, te extrañamos mucho, por siempre amigas las 6 Susana, Beba, Susana, Raquel y Normita haciéndote compañía en el cielo. Las Mosqueteras.
+  published_on: 2020-04-04
+  source_link: "https://funebres.eldia.com/edis/20200404/funebres2.htm"
+  hash_id: de4e14
+
+mario_garcia_878c13:
+  full_name: "MARIO GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 26/10/2018.- El personal del Instituto de Investigaciones Bioquímicas de La Plata participan con profunda tristeza el fallecimiento del hermano de Margarita García de Bravo, acompañan a su familia en este penoso momento y ruegan una oración en su memoria.
+  published_on: 2018-10-30
+  source_link: "https://funebres.eldia.com/edis/20181030/funebres2.htm"
+  hash_id: 878c13
+
+maximo_garcia_b2aea7:
+  full_name: "MAXIMO GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 14/01/2022. Ex director y dueño de Clínica y Maternidad del Este.- Lo despiden con amor sus cuatro hijos: Mariana, Karina, Daniela y Fernando García, sus seis nietitos: Lucia Negri García, Juan García, Federico García, Lucca Colagreco, Paz O' Neill y León O' Neill, su esposa: Mabel Del Zotto, su hermana: Mabelita García y flia. Costas, sus grandes amigos de toda la vida: Pilín Tabuenca y flia., Coco Robles y flia., Isabel Rueda y Coco Adaglio y flia., Luisita Raffin y flia., Carlitos Raffin y flia., Chichita Díaz y flia. Minguinelli, Raquel Tassi y flia., Ita Obeso y flia. Una especial mención a la atención del Instituto Médico Platense y la Dra. Giselle Busetto, Dra. Karina Fazio (Dinatos). Especial Agradecimiento a su gran amigo de toda la vida y dueño del Instituto Médico Platense Raúl Tassi y su hijo Agustín Tassi. Exequias a cargo de Viuda de D. Boccia e Hijos. Calle 57 e/5 y 6. Tel. 0800-3330703 / 421-1500/ 483-1500.
+  published_on: 2022-01-15
+  source_link: "https://funebres.eldia.com/edis/20220115/funebres2.htm"
+  hash_id: b2aea7
+
+dr_fermin_garcia_fb6dea:
+  full_name: "Dr. FERMIN GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 05/12/2022.- Lo despedimos con cariño y oraciones. Paz para su alma. Picky, Cecilia, Magdalena y Javier García.
+  published_on: 2022-12-06
+  source_link: "https://funebres.eldia.com/edis/20221206/funebres2.htm"
+  hash_id: fb6dea
+
+fermin_garcia_aa918a:
+  full_name: "FERMIN GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 05/12/2022.- Polo Cicchino, su esposa Ma. Rita Zoya, sus hijos Mauro y Graciana Rosa Bellone, Lucía y Emanuel Cosoli, Camila y Horacio Napoli, sus nietos Fausto y Homero Cosoli, Carmela Napoli y Ramiro Cicchino, despiden con mucho cariño al amigo Fermín.
+  published_on: 2022-12-06
+  source_link: "https://funebres.eldia.com/edis/20221206/funebres2.htm"
+  hash_id: aa918a
+
+juan_carlos_munoz_1c7826:
+  full_name: "JUAN CARLOS MUÑOZ"
+  content: |
+    (Q.E.P.D.) Falleció el 15/06/2025.- Sus hijos: Juan Manuel, María Lorena, Carlos Alberto, Cristina Beatriz, hijos políticos: Andrea Folino, Evelyn Rodriguez, Juan Bessa, sus nietos, su hermano: Carlos Videla, cuñados, sobrinos y demás deudos participan con profundo dolor su fallecimiento, sus restos serán trasladados al cementerio local hoy 11,15 hs. Sepelios Dei – 12 N° 1792 – tel. 451-7852 – deisepelios@gmail.com.
+  published_on: 2025-06-16
+  source_link: "https://funebres.eldia.com/edis/20250616/funebres2.htm"
+  hash_id: 1c7826
+
+maria_soledad_perez_de_garcia_61f84b:
+  full_name: "MARIA SOLEDAD PEREZ DE GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 03/10/2023.- Despedimos con inmenso cariño y gratitud a Sole. Abrazamos en este duro momento a Fede, Nano y Manu, brindándoles nuestro incondicional apoyo. Maestros y Maestras de la Escuelita Barrio Jardín. Galliano e Hijos: Avda. 53 Nº 1181 (18 y 19). Tel/Fax: 451-7360 mail: gallianoehijos@hotmail.com.ar.
+  published_on: 2023-10-05
+  source_link: "https://funebres.eldia.com/edis/20231005/funebres2.htm"
+  hash_id: 61f84b
+
+reina_rosa_di_francesco_vda_de_garcia_lala_b3487a:
+  full_name: "REINA ROSA DI FRANCESCO Vda. de GARCIA (Lala)"
+  content: |
+    (Q.E.P.D.) Falleció el 22/10/2013.- Ana María Ziola de Morin, Claudia Patricia Morin, Analía Morin, Gustavo Carrons y Tomás Carrons participan su fallecimiento y acompañan afectuosamente a toda su familia en estos momentos, sus restos fueron trasladados ayer al cementerio La Plata Parque. Sepelios Dei, 12 Nº 1792. Tel/fax: 451-7852.
+  published_on: 2013-10-24
+  source_link: "https://funebres.eldia.com/edis/20131024/funebres2.htm"
+  hash_id: b3487a
+
+maria_del_carmen_garcia_vda_de_scoppa_ba0f1e:
+  full_name: "MARIA DEL CARMEN GARCIA VDA. DE SCOPPA"
+  content: |
+    (Q.E.P.D.) Falleció el 25/05/2023.- Charito, Bichi y Martin Tiscornia participan con profundo pesar su partida, acompañan a Gustavo y a Cristina en tan doloroso momento y ruegan una oración por su eterno descanso.
+  published_on: 2023-05-28
+  source_link: "https://funebres.eldia.com/edis/20230528/funebres2.htm"
+  hash_id: ba0f1e
+
+enrique_mario_garcia_75570a:
+  full_name: "ENRIQUE MARIO GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 16/09/2023.- Su compañera: Mirta Rosales; su madre: Estela; sus hermanos: Raúl y Marcelo; su cuñada: Alicia, sus sobrinos Samanta, Pablo y Damián; su sobrino nieto: Blas; participan su fallecimiento y agradecen una oración en su memoria.
+  published_on: 2023-09-22
+  source_link: "https://funebres.eldia.com/edis/20230922/funebres2.htm"
+  hash_id: 75570a
+
+maria_garcia_65b2f7:
+  full_name: "MARIA GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 07/10/2024.- Sus hijos Miriam y Ruben, sus nietos Amalia, Augusto, Manuela y Ruben, sus bisnietos Bauti, Gaspar y Francisco, su hermana del alma Mercedes Seminara y Lidia García participan con profundo dolor su fallecimiento. No se efectúa velatorio. Exequias a cargo de Viuda de D. Boccia e Hijos. Calle 57 e/5 y 6. Tel. 421-1500/ 483-1500, WhatsApp 221-498-3926.
+  published_on: 2024-10-08
+  source_link: "https://funebres.eldia.com/edis/20241008/funebres2.htm"
+  hash_id: 65b2f7
+
+maria_cristina_garcia_32df6a:
+  full_name: "MARIA CRISTINA GARCIA"
+  content: |
+    (Q.E.P.D.) Falleció el 30/06/2019.- El Consejo de Administración y personal de la Cooperativa COSEGO Ltda. de Joaquín Gorina participa con profundo pesar el fallecimiento de la Tesorera del Consejo fundador de la misma y acompaña a su esposo, Dante Osmar Belletti, su hija María José Iglesias y demás familiares en este doloroso momento, rogando una oración por el eterno descanso de su alma.
+  published_on: 2019-07-02
+  source_link: "https://funebres.eldia.com/edis/20190702/funebres2.htm"
+  hash_id: 32df6a

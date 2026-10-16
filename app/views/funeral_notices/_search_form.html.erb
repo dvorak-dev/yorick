@@ -1,15 +1,22 @@
 <div class="bg-white shadow-lg rounded-2xl p-8 mb-10 backdrop-blur-md text-gray-700">
   <%= form_with url: funeral_notices_path, method: :get, local: true do |f| %>
     <div class="space-y-6">
-      <%= f.text_field :full_name,
-        placeholder: "Nombre completo. Ej: Tom Marvolo Riddle",
-        value: params[:full_name],
-        class: "w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" %>
+      <div>
+        <%= f.label :full_name, 'Nombre', class: 'block text-sm font-medium mb-2' %>
+        <%= f.text_field :full_name,
+          placeholder: 'Ej.: Norma García',
+          value: params[:full_name],
+          class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+        <p class="mt-2 text-sm text-gray-500">Se puede buscar por el comienzo del apellido, como Garc.</p>
+      </div>
 
-      <%= f.text_field :content,
-        placeholder: "Contenido. Ej: tu amigo Harry",
-        value: params[:content],
-        class: "w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" %>
+      <div>
+        <%= f.label :content, 'Texto del aviso', class: 'block text-sm font-medium mb-2' %>
+        <%= f.text_field :content,
+          placeholder: 'Ej.: mosqueteras',
+          value: params[:content],
+          class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+      </div>
 
       <div class="flex justify-center gap-6">
         <%= link_to "Limpiar", funeral_notices_path,

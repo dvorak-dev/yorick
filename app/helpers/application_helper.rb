@@ -1,9 +1,11 @@
 module ApplicationHelper
   def highlight_search_terms(text, query)
-    return text if query.blank?
+    return text if text.blank? || query.blank?
 
-    query = Regexp.escape(query) # Escape any special characters in the search query
-    highlighted = text.gsub(/(#{query})/i, '<mark>\1</mark>')
+    pattern = FuneralNoticeSearch.highlight_pattern(query)
+    return text if pattern.nil?
+
+    highlighted = text.gsub(pattern) { |match| "<mark>#{match}</mark>" }
     # rubocop:disable Rails/OutputSafety
     highlighted.html_safe
     # rubocop:enable Rails/OutputSafety
