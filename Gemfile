@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.4.11'
+ruby '4.0.7'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.1.4'
@@ -9,10 +9,10 @@ gem 'rails', '~> 8.1.4'
 gem 'sprockets-rails'
 
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 1.1'
+gem 'pg', '~> 1.7.0'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '>= 5.0'
+gem 'puma', '~> 8.0.2'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
@@ -75,6 +75,6 @@ end
 gem 'chewy', '~> 8.4'
 gem 'elasticsearch', '>= 8.14', '< 9'
 gem 'pagy', '~> 9.3'
-gem 'sitemap_generator', '~> 6.3'
+gem 'sitemap_generator', '~> 7.1.1'
 gem 'tailwindcss-rails', '~> 4.2'
 gem 'view_component', '~> 4.15'

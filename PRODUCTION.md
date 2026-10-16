@@ -60,10 +60,11 @@ docker-compose -f docker-compose.prod.yml logs -f web
 - **Volumes**: Storage, Logs
 
 ### PostgreSQL Database
-- **Version**: 15-alpine
+- **Version**: 15-alpine (still the running server)
 - **Port**: Internal only (5432)
 - **Health Check**: Database connectivity
 - **Volume**: Persistent data storage
+- **Upgrade**: Postgres 16 is pinned in the repo and is not applied on the server yet. Follow [docs/postgres-16-migration.md](docs/postgres-16-migration.md). Do not change the image tag until that dump and restore is done.
 
 ### Elasticsearch
 - **Version**: 8.13.4

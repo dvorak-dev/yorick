@@ -197,13 +197,19 @@ GEM
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.9)
+    pg (1.7.0)
+    pg (1.7.0-aarch64-linux)
+    pg (1.7.0-aarch64-linux-musl)
+    pg (1.7.0-arm64-darwin)
+    pg (1.7.0-x86_64-darwin)
+    pg (1.7.0-x86_64-linux)
+    pg (1.7.0-x86_64-linux-musl)
     pp (0.6.4)
       prettyprint
     prettyprint (0.2.1)
     prism (1.9.0)
     public_suffix (6.0.2)
-    puma (6.6.0)
+    puma (8.0.2)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.22)
@@ -292,7 +298,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sitemap_generator (6.3.0)
+    sitemap_generator (7.1.1)
       builder (~> 3.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -324,7 +330,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
-    unicode-emoji (4.0.4)
+    unicode-emoji (4.3.0)
     uri (1.1.2)
     useragent (0.16.11)
     view_component (4.15.0)
@@ -366,14 +372,14 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   pagy (~> 9.3)
-  pg (~> 1.1)
-  puma (>= 5.0)
+  pg (~> 1.7.0)
+  puma (~> 8.0.2)
   rails (~> 8.1.4)
   rubocop
   rubocop-performance
   rubocop-rails
   selenium-webdriver
-  sitemap_generator (~> 6.3)
+  sitemap_generator (~> 7.1.1)
   sprockets-rails
   stimulus-rails
   tailwindcss-rails (~> 4.2)
@@ -383,7 +389,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.4.11p137
+   ruby 4.0.7p0
 
 BUNDLED WITH
    2.6.5
