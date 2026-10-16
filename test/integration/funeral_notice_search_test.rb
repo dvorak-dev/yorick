@@ -1,6 +1,21 @@
 require 'test_helper'
 
 module FuneralNoticeSearchTestSupport
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
+  module ClassMethods
+    def prepare_index
+      return if @index_ready
+
+      Chewy.strategy(:urgent)
+      FuneralNoticesIndex.purge!
+      FuneralNoticesIndex.import!(FuneralNotice.all)
+      @index_ready = true
+    end
+  end
+
   def with_page_limit(limit)
     original = Pagy::OPTIONS[:limit]
     Pagy::OPTIONS[:limit] = limit
@@ -31,17 +46,6 @@ class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
 
   setup do
     self.class.prepare_index
-  end
-
-  class << self
-    def prepare_index
-      return if @index_ready
-
-      Chewy.strategy(:urgent)
-      FuneralNoticesIndex.purge!
-      FuneralNoticesIndex.import!(FuneralNotice.all)
-      @index_ready = true
-    end
   end
 
   test 'returns the notice when the query adds one surname' do
@@ -133,12 +137,31 @@ class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
 
     assert_select 'label', text: 'Nombre'
     assert_select 'label', text: 'Texto del aviso'
-    assert_select 'input[placeholder=?]', 'Ej.: Norma García'
-    assert_select 'input[placeholder=?]', 'Ej.: mosqueteras'
-    assert_match 'Se puede buscar por el comienzo del apellido, como Garc.', response.body
-    assert_no_match 'Tom Marvolo Riddle', response.body
-    assert_no_match 'tu amigo Harry', response.body
+    assert_select 'legend', text: 'Publicado entre'
+    assert_select 'input[placeholder=?]', 'Nombre completo. Ej: Tom Marvolo Riddle'
+    assert_select 'input[placeholder=?]', 'Contenido. Ej: tu amigo Harry'
+    assert_select 'input[placeholder=?]', '2016'
+    assert_select 'input[placeholder=?]', '2017'
+    assert_match 'Se puede buscar por el comienzo del apellido, como Ridd.', response.body
     assert_no_match 'Pruebe el comienzo del apellido', response.body
+  end
+
+  test 'limits a name to the publication years' do
+    get funeral_notices_path, params: { full_name: 'maximiliano garcia', year_from: 2013, year_to: 2014 }
+
+    assert_response :success
+    assert_match 'Publicado el 31 de octubre de 2013', response.body
+    assert_no_match 'Publicado el 30 de octubre de 2024', response.body
+  end
+
+  test 'requires both the name and the notice text' do
+    get funeral_notices_path, params: { full_name: 'norma garcia', content: 'mosqueteros' }
+
+    assert_no_match 'NORMA GARCIA', response.body
+
+    get funeral_notices_path, params: { full_name: 'norma garcia', content: 'mosqueteras' }
+
+    assert_match 'NORMA GARCIA', response.body
   end
 
   test 'suggests a shorter search when nothing matches' do

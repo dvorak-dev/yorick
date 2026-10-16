@@ -4,19 +4,33 @@
       <div>
         <%= f.label :full_name, 'Nombre', class: 'block text-sm font-medium mb-2' %>
         <%= f.text_field :full_name,
-          placeholder: 'Ej.: Norma García',
+          placeholder: 'Nombre completo. Ej: Tom Marvolo Riddle',
           value: params[:full_name],
           class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
-        <p class="mt-2 text-sm text-gray-500">Se puede buscar por el comienzo del apellido, como Garc.</p>
+        <p class="mt-2 text-sm text-gray-500">Se puede buscar por el comienzo del apellido, como Ridd.</p>
       </div>
 
       <div>
         <%= f.label :content, 'Texto del aviso', class: 'block text-sm font-medium mb-2' %>
         <%= f.text_field :content,
-          placeholder: 'Ej.: mosqueteras',
+          placeholder: 'Contenido. Ej: tu amigo Harry',
           value: params[:content],
           class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
       </div>
+
+      <fieldset>
+        <legend class="block text-sm font-medium mb-2">Publicado entre</legend>
+        <div class="grid grid-cols-2 gap-4">
+          <%= f.number_field :year_from,
+            placeholder: '2016',
+            value: params[:year_from],
+            class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+          <%= f.number_field :year_to,
+            placeholder: '2017',
+            value: params[:year_to],
+            class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+        </div>
+      </fieldset>
 
       <div class="flex justify-center gap-6">
         <%= link_to "Limpiar", funeral_notices_path,

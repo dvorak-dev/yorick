@@ -1,6 +1,6 @@
 class FuneralNoticesController < ApplicationController
   def index
-    @pagy, @funeral_notices = if params[:full_name].present? || params[:content].present?
+    @pagy, @funeral_notices = if search_params.to_h.values.any?(&:present?)
                                 search_funeral_notices
                               else
                                 default_notice_page
@@ -48,13 +48,45 @@ class FuneralNoticesController < ApplicationController
   end
 
   def build_search_query(search)
+    text = text_query(search)
+    published = published_on_filter(search)
+    return {} if text.blank? && published.blank?
+
+    bool = {}
+    bool[:must] = text if text.present?
+    bool[:filter] = published if published.present?
+    { bool: bool }
+  end
+
+  def text_query(search)
     queries = []
     queries << FuneralNoticeSearch.field_query('full_name', search[:full_name]) if search[:full_name].present?
     queries << FuneralNoticeSearch.field_query('content', search[:content]) if search[:content].present?
     queries.compact!
-    return {} if queries.empty?
+    queries.presence
+  end
 
-    { bool: { should: queries, minimum_should_match: 1 } }
+  def published_on_filter(search)
+    from_year, to_year = publication_years(search)
+    return if from_year.nil? && to_year.nil?
+
+    range = {}
+    range[:gte] = Date.new(from_year, 1, 1).iso8601 if from_year
+    range[:lte] = Date.new(to_year, 12, 31).iso8601 if to_year
+    [{ range: { published_on: range } }]
+  end
+
+  def publication_years(search)
+    years = [four_digit_year(search[:year_from]), four_digit_year(search[:year_to])]
+    years.reverse! if years.all? && years.first > years.last
+    years
+  end
+
+  def four_digit_year(value)
+    year = value.to_s
+    return unless year.match?(/\A\d{4}\z/)
+
+    year.to_i
   end
 
   def search_funeral_notices
@@ -86,6 +118,6 @@ class FuneralNoticesController < ApplicationController
   end
 
   def search_params
-    params.except(:commit).permit(:full_name, :content)
+    params.except(:commit).permit(:full_name, :content, :year_from, :year_to)
   end
 end
