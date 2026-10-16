@@ -9,7 +9,7 @@
     "start:http": "node src/index.js",
     "dev:http": "nodemon --watch src src/index.js",
     "build": "echo 'No build step required for Node.js'",
-    "test": "echo 'No tests configured yet'"
+    "test": "node --test src/tools/search_query.test.js"
   },
   "keywords": [
     "mcp",

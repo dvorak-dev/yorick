@@ -1,78 +1,90 @@
-import { es } from '../config/database.js';
+import { db, es } from '../config/database.js';
+import { buildSearchRequest } from './search_query.js';
+
+function searchLabel(args) {
+  return [args.full_name, args.content, args.query].filter(Boolean).join(' / ');
+}
+
+function hitId(hit) {
+  const raw = hit._source?.id ?? hit._id;
+  const id = Number(raw);
+  return Number.isInteger(id) ? id : null;
+}
+
+async function loadNotices(ids) {
+  if (ids.length === 0) return [];
+
+  const result = await db.query(
+    `SELECT id, hash_id, full_name, content, published_on, source_link
+     FROM funeral_notices
+     WHERE id = ANY($1::int[])`,
+    [ids],
+  );
+  return result.rows;
+}
+
+function emptySearch(label) {
+  return {
+    content: [
+      {
+        type: 'text',
+        text: `Found 0 funeral notices matching "${label}"`,
+      },
+    ],
+    isError: false,
+    metadata: {
+      total_results: 0,
+      page: 1,
+      results: [],
+    },
+  };
+}
 
 async function searchFuneralNotices(args) {
-  const { query, date_from, date_to, limit = 50 } = args;
-
-  if (!query) {
-    throw new Error('Query parameter is required');
+  const request = buildSearchRequest(args);
+  if (!request) {
+    throw new Error('A search parameter is required');
   }
 
+  const label = searchLabel(args);
+  if (request.empty) return emptySearch(label);
+
   try {
-    // Build Elasticsearch query
-    const searchQuery = {
-      index: process.env.ELASTICSEARCH_INDEX || 'yorick_production_funeral_notices',
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                multi_match: {
-                  query: query,
-                  fields: ['full_name^3', 'full_name._2gram^2', 'full_name._3gram', 'content^2', 'content._2gram', 'content._3gram'],
-                  type: 'best_fields',
-                  fuzziness: 'AUTO',
-                  operator: 'and',
-                  minimum_should_match: '50%',
-                  boost: 2.0,
-                  tie_breaker: 0.3,
-                  max_expansions: 10
-                }
-              }
-            ],
-            filter: []
-          }
-        },
-        sort: [
-          { published_on: { order: 'desc' } }
-        ],
-        size: Math.min(limit, 500) // Cap at 500 results
-      }
-    };
-
-    // Add date filters if provided
-    if (date_from || date_to) {
-      const dateFilter = { range: { published_on: {} } };
-      if (date_from) dateFilter.range.published_on.gte = date_from;
-      if (date_to) dateFilter.range.published_on.lte = date_to;
-      searchQuery.body.query.bool.filter.push(dateFilter);
-    }
-
-    const response = await es.search(searchQuery);
-    
-            const results = response.hits.hits.map(hit => ({
-          hash_id: hit._source.hash_id,
-          full_name: hit._source.full_name,
-          content: hit._source.content,
-          published_on: hit._source.published_on,
-          source_link: hit._source.source_link,
-          score: hit._score
-        }));
+    const response = await es.search({ index: request.index, body: request.body });
+    const hits = response.hits.hits;
+    const ids = hits.map(hitId).filter((id) => id !== null);
+    const scoreById = new Map(hits.map((hit) => [hitId(hit), hit._score]));
+    const notices = await loadNotices(ids);
+    const byId = new Map(notices.map((notice) => [Number(notice.id), notice]));
+    const results = ids.flatMap((id) => {
+      const notice = byId.get(id);
+      if (!notice) return [];
+      return [{
+        hash_id: notice.hash_id,
+        full_name: notice.full_name,
+        content: notice.content,
+        published_on: notice.published_on,
+        source_link: notice.source_link,
+        score: scoreById.get(id),
+      }];
+    });
+    const total = response.hits.total?.value ?? response.hits.total ?? 0;
 
     return {
       content: [
         {
-          type: "text",
-          text: `Found ${results.length} funeral notices matching "${query}"`
-        }
+          type: 'text',
+          text: `Found ${results.length} of ${total} funeral notices matching "${label}"`,
+        },
       ],
       isError: false,
       metadata: {
-        total_results: response.hits.total.value,
+        total_results: total,
+        page: request.page,
         query_time_ms: response.took,
-        results: results
-      }
+        results,
+      },
     };
-
   } catch (error) {
     console.error('Elasticsearch search error:', error);
     throw new Error(`Search failed: ${error.message}`);
@@ -80,5 +92,5 @@ async function searchFuneralNotices(args) {
 }
 
 export {
-  searchFuneralNotices
-}; 
+  searchFuneralNotices,
+};
