@@ -1,6 +1,6 @@
 # Dependency upgrade roadmap v2
 
-Status: 16 October 2026. Next step is the frontend gems. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
+Status: 16 October 2026. The v2 plan is complete. This file is the source of truth for the next upgrade plan. [upgrade-roadmap.md](upgrade-roadmap.md) is the record of the finished work. [DEVELOPMENT.md](../DEVELOPMENT.md) and [PRODUCTION.md](../PRODUCTION.md) stay on the versions that are running until each item ships.
 
 Work in this order. Each step lands on its own branch.
 
@@ -54,15 +54,15 @@ Controllers call `pagy(:offset, collection)`. `Pagy::Backend`, `Pagy::Frontend`,
 
 Pin: [Gemfile](../Gemfile) (`~> 43.7.1`).
 
-## 6. Frontend
+## 6. Frontend — done 16 October 2026
 
-One step:
-
-- `tailwindcss-rails` `4.2.3` → `4.6.0`
+- `tailwindcss-rails` `4.2.3` → `4.6.0` (`tailwindcss-ruby` `4.1.10` → `4.3.3`)
 - `turbo-rails` `2.0.16` → `2.0.23`
 - `importmap-rails` `2.1.0` → `2.2.3`
 
-Pins: [Gemfile](../Gemfile).
+Rack stayed at `3.1.22`.
+
+Pins: [Gemfile](../Gemfile) (`~> 4.6.0`, `~> 2.0.23`, `~> 2.2.3`).
 
 ## Out of this plan
 

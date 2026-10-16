@@ -15,10 +15,10 @@ gem 'pg', '~> 1.7.0'
 gem 'puma', '~> 8.0.2'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem 'importmap-rails'
+gem 'importmap-rails', '~> 2.2.3'
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem 'turbo-rails'
+gem 'turbo-rails', '~> 2.0.23'
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem 'stimulus-rails'
@@ -76,5 +76,5 @@ gem 'chewy', '~> 8.4'
 gem 'elasticsearch', '>= 8.14', '< 9'
 gem 'pagy', '~> 43.7.1'
 gem 'sitemap_generator', '~> 7.1.1'
-gem 'tailwindcss-rails', '~> 4.2'
+gem 'tailwindcss-rails', '~> 4.6.0'
 gem 'view_component', '~> 4.15'
