@@ -7,6 +7,6 @@ class PaginationComponent < ViewComponent::Base
   end
 
   def params_to_keep
-    request.query_parameters.slice(:full_name, :content, :year_from, :year_to)
+    request.query_parameters.slice(:full_name, :content, :year_from, :year_to, :order)
   end
 end

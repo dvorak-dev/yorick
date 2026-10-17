@@ -7,7 +7,7 @@ class FuneralNoticesController < ApplicationController
                               end
 
     # Set cache headers for index page
-    fresh_when(@funeral_notices.first, etag: [@funeral_notices, @pagy.page, search_params])
+    fresh_when(@funeral_notices.first, etag: [@funeral_notices, @pagy.page, search_params, date_order])
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -44,7 +44,11 @@ class FuneralNoticesController < ApplicationController
   private
 
   def default_notice_page
-    pagy(:offset, FuneralNotice.order(published_on: :desc, full_name: :asc))
+    pagy(:offset, FuneralNotice.order(published_on: (date_order || 'desc').to_sym, full_name: :asc))
+  end
+
+  def date_order
+    params[:order] if params[:order].in?(%w[asc desc])
   end
 
   def build_search_query(search)
@@ -106,9 +110,15 @@ class FuneralNoticesController < ApplicationController
   def search_request(search_query, page)
     limit = Pagy::OPTIONS[:limit]
     FuneralNoticesIndex.query(search_query)
-      .order({ _score: { order: :desc } }, { published_on: { order: :desc } })
+      .order(*search_sort)
       .limit(limit)
       .offset((page - 1) * limit)
+  end
+
+  def search_sort
+    return [{ published_on: { order: date_order } }] if date_order
+
+    [{ _score: { order: :desc } }, { published_on: { order: :desc } }]
   end
 
   def notices_in_hit_order(request)

@@ -40,6 +40,7 @@ module FuneralNoticeSearchTestSupport
   end
 end
 
+# rubocop:disable Metrics/ClassLength
 class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
   include FuneralNoticeSearchTestSupport
   parallelize(workers: 1)
@@ -77,6 +78,13 @@ class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
     assert_no_match 'NESTOR ORAZI', response.body
   end
 
+  test 'a misspelled surname ranks that person above a shared given name' do
+    get funeral_notices_path, params: { full_name: 'maria garca' }
+    titles = css_select('h2').map { |node| node.text.strip }
+
+    assert_operator titles.index('MARIA GARCIA'), :<, titles.index('MARIA CRISTINA DEL VALLE')
+  end
+
   test 'ranks a complete name above a newer partial match' do
     get funeral_notices_path, params: { full_name: 'maximiliano garcia' }
     titles = css_select('h2').map { |node| node.text.strip }
@@ -89,6 +97,42 @@ class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
     get funeral_notices_path, params: { full_name: 'maximiliano garcia' }
 
     assert_equal 'Publicado el 30 de octubre de 2024', css_select('p.text-sm.mb-2').first.text.strip
+  end
+
+  test 'newest publication date leads when that order is selected' do
+    get funeral_notices_path, params: { full_name: 'maximiliano garcia', order: 'desc' }
+    titles = css_select('h2').map { |node| node.text.strip }
+
+    assert_equal 'NORMA GARCIA', titles.first
+    assert_equal 'Publicado el 22 de diciembre de 2024', css_select('p.text-sm.mb-2').first.text.strip
+    assert_operator titles.index('NORMA GARCIA'), :<, titles.index('MAXIMILIANO GARCIA')
+  end
+
+  test 'oldest publication date leads when that order is selected' do
+    get funeral_notices_path, params: { full_name: 'maximiliano garcia', order: 'asc' }
+
+    assert_equal 'REINA ROSA DI FRANCESCO Vda. de GARCIA (Lala)', css_select('h2').first.text.strip
+    assert_equal 'Publicado el 24 de octubre de 2013', css_select('p.text-sm.mb-2').first.text.strip
+  end
+
+  test 'the plain listing can start with the oldest notice' do
+    with_page_limit(1) do
+      get funeral_notices_path, params: { order: 'asc' }
+
+      assert_equal 'LAURA GARI', css_select('h2').first.text.strip
+      assert_match 'order=asc', css_select('a[rel="next"]').first['href']
+      assert_select '[data-search-filters-applied-value=?]', 'true'
+      assert_select 'a', text: 'Más antiguos'
+      assert_select 'a', text: 'Relevancia', count: 0
+    end
+  end
+
+  test 'a search offers relevance and keeps the chosen date order' do
+    get funeral_notices_path, params: { full_name: 'garcia', order: 'asc' }
+
+    assert_select 'a[aria-current]', text: 'Más antiguos'
+    assert_select 'a', text: 'Relevancia'
+    assert_select 'input[name="order"][value="asc"]'
   end
 
   test 'marks each token in the search results' do
@@ -120,6 +164,15 @@ class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
     assert_not_includes limits, 500
   end
 
+  test 'a misspelled long surname still finds the notice' do
+    %w[ZAPETINNI ZAPETTINI ZAPPETINI ZAPPETTINNI].each do |query|
+      get funeral_notices_path, params: { full_name: query }
+
+      assert_response :success
+      assert_match 'ZAPPETTINI', response.body
+    end
+  end
+
   test 'a name prefix matches that surname and marks the whole word' do
     get funeral_notices_path, params: { full_name: 'Garc' }
 
@@ -132,9 +185,19 @@ class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
     assert_select 'mark', text: 'GARCE'
   end
 
+  test 'keeps the active filters readable when they can be collapsed' do
+    get funeral_notices_path, params: { full_name: 'garcia', year_from: 2013, year_to: 2014 }
+
+    assert_select 'button[aria-expanded=true]', text: 'Ocultar filtros'
+    assert_select '[data-search-filters-applied-value=?]', 'true'
+    assert_select '[data-search-filters-target=summary]',
+                  text: 'Nombre: garcia · Publicado: 2013–2014 · Orden: Relevancia'
+  end
+
   test 'explains the name and notice text fields' do
     get funeral_notices_path
 
+    assert_select '[data-search-filters-applied-value=?]', 'false'
     assert_select 'label', text: 'Nombre'
     assert_select 'label', text: 'Texto del aviso'
     assert_select 'legend', text: 'Publicado entre'
@@ -171,3 +234,4 @@ class FuneralNoticeSearchTest < ActionDispatch::IntegrationTest
     assert_match 'Pruebe el comienzo del apellido, o una palabra del texto del aviso.', response.body
   end
 end
+# rubocop:enable Metrics/ClassLength

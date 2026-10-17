@@ -1,8 +1,11 @@
 module FuneralNoticeSearch
   STOPWORDS = %w[de del la las los y e vda viuda].freeze
   FULL_MATCH_BOOST = 4
+  FUZZY_MATCH_BOOST = 2
   PARTIAL_MATCH_BOOST = 1
+  PHONETIC_MATCH_BOOST = 1
   PREFIX_MATCH_BOOST = 0.5
+  PHONETIC_MIN_LENGTH = 5
   ACCENTS = {
     'a' => 'aáàäâãAÁÀÄÂÃ',
     'e' => 'eéèëêEÉÈËÊ',
@@ -24,8 +27,11 @@ module FuneralNoticeSearch
     return if tokens.empty?
 
     clauses = match_clauses(field, tokens)
-    clauses << prefix_clause(tokens) if field == 'full_name'
-    { bool: { should: clauses, minimum_should_match: 1 } }
+    if field == 'full_name'
+      clauses << prefix_clause(tokens)
+      clauses << phonetic_clause(tokens)
+    end
+    { bool: { should: clauses.compact, minimum_should_match: 1 } }
   end
 
   def highlight_pattern(query)
@@ -35,15 +41,54 @@ module FuneralNoticeSearch
     Regexp.union(tokens.map { |token| token_pattern(token) })
   end
 
+  def name_metaphones(text)
+    significant_tokens(text).filter_map { |token| NameMetaphone.primary(token).presence }
+  end
+
   def match_clauses(field, tokens)
     clauses = [match_clause(field, tokens, boost: FULL_MATCH_BOOST, operator: 'and')]
-    return clauses if tokens.one?
+    clauses << partial_clause(field, tokens) if tokens.many?
+    clauses << fuzzy_clause(field, tokens) if fuzzy_name?(field, tokens)
+    clauses
+  end
 
-    clauses << match_clause(
+  def partial_clause(field, tokens)
+    match_clause(field, tokens, boost: PARTIAL_MATCH_BOOST, minimum_should_match: tokens.size - 1)
+  end
+
+  def fuzzy_name?(field, tokens)
+    field == 'full_name' && (tokens.many? || tokens.first.length >= PHONETIC_MIN_LENGTH)
+  end
+
+  def phonetic_clause(tokens)
+    codes = phonetic_codes(tokens)
+    return if codes.empty?
+
+    {
+      bool: {
+        boost: PHONETIC_MATCH_BOOST,
+        must: codes.map { |code| { term: { name_metaphones: code } } }
+      }
+    }
+  end
+
+  def phonetic_codes(tokens)
+    tokens.filter_map do |token|
+      next if token.length < PHONETIC_MIN_LENGTH
+
+      NameMetaphone.primary(token).presence
+    end
+  end
+
+  def fuzzy_clause(field, tokens)
+    match_clause(
       field,
       tokens,
-      boost: PARTIAL_MATCH_BOOST,
-      minimum_should_match: tokens.size - 1
+      boost: FUZZY_MATCH_BOOST,
+      operator: 'and',
+      fuzziness: 'AUTO',
+      prefix_length: 1,
+      max_expansions: 50
     )
   end
 
@@ -59,10 +104,9 @@ module FuneralNoticeSearch
     }
   end
 
-  def match_clause(field, tokens, boost:, operator: nil, minimum_should_match: nil)
+  def match_clause(field, tokens, boost:, **extra)
     options = { query: tokens.join(' '), boost: boost }
-    options[:operator] = operator if operator
-    options[:minimum_should_match] = minimum_should_match if minimum_should_match
+    extra.each { |key, value| options[key] = value unless value.nil? }
     { match: { field => options } }
   end
 

@@ -10,12 +10,18 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d myapp_development"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.19.23
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
       - TZ=America/Argentina/Buenos_Aires
     ports:
@@ -28,9 +34,12 @@ services:
         max-size: "10m"
         max-file: "3"
         tag: "{{.Name}}"
-    tty: false
-    stdin_open: false
-    command: ["sh", "-c", "elasticsearch > /dev/null 2>&1"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 40s
 
   mcp-server:
     build:
@@ -46,8 +55,10 @@ services:
       - ./mcp-server:/app
       - /app/node_modules
     depends_on:
-      - db
-      - elasticsearch
+      db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
     ports:
       - "3001:3001"
     healthcheck:

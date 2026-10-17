@@ -26,10 +26,9 @@
   <div class="mt-8">
     <% if @funeral_notices.any? %>
       <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
-        <p class="">
+        <p>
           Resultados <strong><%= @pagy.from %></strong> - <strong><%= @pagy.to %></strong> de <strong><%= @pagy.count %></strong>
         </p>
-
         <%= render(PaginationComponent.new(pagy: @pagy)) %>
       </div>
 
