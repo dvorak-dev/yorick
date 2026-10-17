@@ -1,7 +1,13 @@
+import { primary as metaphone } from './name_metaphone.js';
+
 const STOPWORDS = new Set(['de', 'del', 'la', 'las', 'los', 'y', 'e', 'vda', 'viuda']);
+
 const FULL_MATCH_BOOST = 4;
+const FUZZY_MATCH_BOOST = 2;
 const PARTIAL_MATCH_BOOST = 1;
+const PHONETIC_MATCH_BOOST = 1;
 const PREFIX_MATCH_BOOST = 0.5;
+const PHONETIC_MIN_LENGTH = 5;
 const DEFAULT_PAGE_SIZE = 50;
 
 function significantTokens(text) {
@@ -21,6 +27,10 @@ function matchClause(field, tokens, boost, extra) {
   };
 }
 
+function fuzzyName(field, tokens) {
+  return field === 'full_name' && (tokens.length > 1 || tokens[0].length >= PHONETIC_MIN_LENGTH);
+}
+
 function matchClauses(field, tokens) {
   const clauses = [matchClause(field, tokens, FULL_MATCH_BOOST, { operator: 'and' })];
   if (tokens.length > 1) {
@@ -28,7 +38,30 @@ function matchClauses(field, tokens) {
       minimum_should_match: tokens.length - 1,
     }));
   }
+  if (fuzzyName(field, tokens)) {
+    clauses.push(matchClause(field, tokens, FUZZY_MATCH_BOOST, {
+      operator: 'and',
+      fuzziness: 'AUTO',
+      prefix_length: 1,
+      max_expansions: 50,
+    }));
+  }
   return clauses;
+}
+
+function phoneticClause(tokens) {
+  const codes = tokens
+    .filter((token) => token.length >= PHONETIC_MIN_LENGTH)
+    .map((token) => metaphone(token))
+    .filter((code) => code);
+  if (codes.length === 0) return null;
+
+  return {
+    bool: {
+      boost: PHONETIC_MATCH_BOOST,
+      must: codes.map((code) => ({ term: { name_metaphones: code } })),
+    },
+  };
 }
 
 function prefixClause(tokens) {
@@ -48,7 +81,11 @@ function fieldQuery(field, text) {
   if (tokens.length === 0) return null;
 
   const clauses = matchClauses(field, tokens);
-  if (field === 'full_name') clauses.push(prefixClause(tokens));
+  if (field === 'full_name') {
+    clauses.push(prefixClause(tokens));
+    const phonetic = phoneticClause(tokens);
+    if (phonetic) clauses.push(phonetic);
+  }
   return { bool: { should: clauses, minimum_should_match: 1 } };
 }
 

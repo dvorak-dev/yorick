@@ -14,6 +14,7 @@ class FuneralNoticesIndex < Chewy::Index
 
   field :id, type: :integer
   field :full_name, type: 'search_as_you_type', analyzer: 'folded'
+  field :name_metaphones, type: :keyword, value: -> { FuneralNoticeSearch.name_metaphones(full_name) }
   field :content, type: :text, analyzer: 'folded'
   field :published_on, type: :date
   field :created_at, type: :date

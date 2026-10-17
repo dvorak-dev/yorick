@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_10_012235) do
+ActiveRecord::Schema[8.1].define(version: 2025_04_10_012235) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "funeral_notices", force: :cascade do |t|
     t.string "full_name"
@@ -26,5 +26,4 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_10_012235) do
     t.index ["published_on", "hash_id"], name: "index_funeral_notices_on_published_on_and_hash_id"
     t.index ["published_on"], name: "index_funeral_notices_on_published_on", order: :desc
   end
-
 end

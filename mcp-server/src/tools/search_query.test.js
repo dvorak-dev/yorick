@@ -18,7 +18,10 @@ test('Garc is a name prefix clause', () => {
     'full_name._2gram',
     'full_name._3gram',
   ]);
-  assert.equal(JSON.stringify(body).includes('fuzziness'), false);
+  const encoded = JSON.stringify(body);
+
+  assert.equal(encoded.includes('fuzziness'), false);
+  assert.equal(encoded.includes('name_metaphones'), false);
 });
 
 test('norma garcia perez still matches when one surname is extra', () => {
@@ -27,7 +30,31 @@ test('norma garcia perez still matches when one surname is extra', () => {
   const partial = clauses.find((clause) => clause.match?.full_name?.minimum_should_match === 2);
 
   assert.equal(partial.match.full_name.query, 'norma garcia perez');
-  assert.equal(JSON.stringify(body).includes('fuzziness'), false);
+  assert.equal(JSON.stringify(partial).includes('fuzziness'), false);
+});
+
+test('a multi-word name allows a small spelling error', () => {
+  const body = requestBody({ full_name: 'maria garca' });
+  const clauses = body.query.bool.should[0].bool.should;
+  const fuzzy = clauses.find((clause) => clause.match?.full_name?.fuzziness === 'AUTO');
+
+  assert.equal(fuzzy.match.full_name.query, 'maria garca');
+  assert.equal(fuzzy.match.full_name.operator, 'and');
+  assert.equal(fuzzy.match.full_name.boost, 2);
+  assert.equal(fuzzy.match.full_name.prefix_length, 1);
+  assert.equal(fuzzy.match.full_name.max_expansions, 50);
+});
+
+test('a long misspelled surname uses fuzziness and a phonetic code', () => {
+  const body = requestBody({ full_name: 'ZAPETINNI' });
+  const clauses = body.query.bool.should[0].bool.should;
+  const fuzzy = clauses.find((clause) => clause.match?.full_name?.fuzziness === 'AUTO');
+  const phonetic = clauses.find((clause) => clause.bool?.must);
+
+  assert.equal(fuzzy.match.full_name.query, 'zapetinni');
+  assert.equal(fuzzy.match.full_name.boost, 2);
+  assert.equal(phonetic.bool.boost, 1);
+  assert.deepEqual(phonetic.bool.must, [{ term: { name_metaphones: 'SPTN' } }]);
 });
 
 test('content search does not use fuzziness or a prefix', () => {
@@ -35,6 +62,7 @@ test('content search does not use fuzziness or a prefix', () => {
   const encoded = JSON.stringify(body);
 
   assert.equal(encoded.includes('fuzziness'), false);
+  assert.equal(encoded.includes('name_metaphones'), false);
   assert.equal(encoded.includes('bool_prefix'), false);
   assert.equal(encoded.includes('mosqueteros'), false);
   assert.match(encoded, /mosqueteras/);

@@ -1,42 +1,77 @@
-<div class="bg-white shadow-lg rounded-2xl p-8 mb-10 backdrop-blur-md text-gray-700">
+<style>
+  html.filters-collapsed [data-search-filters-target="panel"] { grid-template-rows: 0fr; }
+  html.filters-collapsed [data-search-filters-target="fields"] { opacity: 0; }
+  html.filters-collapsed [data-search-filters-target="summary"] { grid-template-rows: 1fr; opacity: 1; }
+</style>
+<div class="bg-white shadow-lg rounded-2xl p-8 mb-10 backdrop-blur-md text-gray-700"
+  data-controller="search-filters" data-search-filters-applied-value="<%= filters_applied? %>">
   <%= form_with url: funeral_notices_path, method: :get, local: true do |f| %>
-    <div class="space-y-6">
-      <div>
-        <%= f.label :full_name, 'Nombre', class: 'block text-sm font-medium mb-2' %>
-        <%= f.text_field :full_name,
-          placeholder: 'Nombre completo. Ej: Tom Marvolo Riddle',
-          value: params[:full_name],
-          class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
-        <p class="mt-2 text-sm text-gray-500">Se puede buscar por el comienzo del apellido, como Ridd.</p>
-      </div>
+    <%= f.hidden_field :order, value: params[:order] if params[:order].in?(%w[asc desc]) %>
+    <button type="button" class="cursor-pointer text-sm font-medium text-[#312e81] hover:text-[#0f172a]"
+      data-search-filters-target="toggle" data-action="search-filters#toggle" aria-expanded="true" aria-controls="search-filters">
+      Ocultar filtros
+    </button>
+    <script>
+      if (window.localStorage.getItem("funeral-notices-filters-collapsed") === "true") {
+        document.documentElement.classList.add("filters-collapsed")
+        var toggle = document.currentScript.previousElementSibling
+        toggle.textContent = "Mostrar filtros"
+        toggle.setAttribute("aria-expanded", "false")
+      }
+    </script>
+    <p id="search-filter-summary" class="grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,opacity] duration-300 ease-in-out motion-reduce:transition-none" data-search-filters-target="summary">
+      <span class="overflow-hidden">
+        <span class="block pt-4 text-sm text-gray-600 break-words" data-search-filters-target="summaryText"><%= active_filter_summary %></span>
+      </span>
+    </p>
 
-      <div>
-        <%= f.label :content, 'Texto del aviso', class: 'block text-sm font-medium mb-2' %>
-        <%= f.text_field :content,
-          placeholder: 'Contenido. Ej: tu amigo Harry',
-          value: params[:content],
-          class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
-      </div>
+    <div id="search-filters" class="grid grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none" data-search-filters-target="panel">
+      <div class="overflow-hidden">
+        <div class="space-y-6 pt-6 opacity-100 transition-opacity duration-300 ease-in-out motion-reduce:transition-none" data-search-filters-target="fields">
+          <div>
+            <%= f.label :full_name, 'Nombre', class: 'block text-sm font-medium mb-2' %>
+            <%= f.text_field :full_name,
+              placeholder: 'Nombre completo. Ej: Tom Marvolo Riddle',
+              value: params[:full_name],
+              class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+            <p class="mt-2 text-sm text-gray-500">Se puede buscar por el comienzo del apellido, como Ridd.</p>
+          </div>
 
-      <fieldset>
-        <legend class="block text-sm font-medium mb-2">Publicado entre</legend>
-        <div class="grid grid-cols-2 gap-4">
-          <%= f.number_field :year_from,
-            placeholder: '2016',
-            value: params[:year_from],
-            class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
-          <%= f.number_field :year_to,
-            placeholder: '2017',
-            value: params[:year_to],
-            class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+          <div>
+            <%= f.label :content, 'Texto del aviso', class: 'block text-sm font-medium mb-2' %>
+            <%= f.text_field :content,
+              placeholder: 'Contenido. Ej: tu amigo Harry',
+              value: params[:content],
+              class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+          </div>
+
+          <fieldset>
+            <legend class="block text-sm font-medium mb-2">Publicado entre</legend>
+            <div class="grid grid-cols-2 gap-4">
+              <%= f.number_field :year_from,
+                placeholder: '2016',
+                value: params[:year_from],
+                class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+              <%= f.number_field :year_to,
+                placeholder: '2017',
+                value: params[:year_to],
+                class: 'w-full text-lg px-6 py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none' %>
+            </div>
+          </fieldset>
+
+          <div class="flex flex-col items-center gap-4 md:flex-row md:justify-between">
+            <nav class="flex flex-wrap justify-center gap-2 text-sm" aria-label="Orden">
+              <%= sort_link('Relevancia', nil) if search_active? %>
+              <%= sort_link('Más recientes', 'desc') %>
+              <%= sort_link('Más antiguos', 'asc') %>
+            </nav>
+            <div class="flex justify-center gap-4 md:justify-end">
+              <%= link_to "Limpiar", funeral_notices_path,
+                class: "bg-gray-200 text-gray-500 text-lg px-8 py-4 rounded-xl hover:bg-gray-300 transition shadow-md cursor-pointer" %>
+              <%= f.submit "Buscar", class: "bg-[#312e81] text-white text-lg px-8 py-4 rounded-xl hover:bg-[#0f172a] transition shadow-md cursor-pointer" %>
+            </div>
+          </div>
         </div>
-      </fieldset>
-
-      <div class="flex justify-center gap-6">
-        <%= link_to "Limpiar", funeral_notices_path,
-          class: "bg-gray-200 text-gray-500 text-lg px-8 py-4 rounded-xl hover:bg-gray-300 transition shadow-md cursor-pointer" %>
-
-        <%= f.submit "Buscar", class: "bg-[#312e81] text-white text-lg px-8 py-4 rounded-xl hover:bg-[#0f172a] transition shadow-md cursor-pointer" %>
       </div>
     </div>
   <% end %>
